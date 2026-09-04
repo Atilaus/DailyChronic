@@ -31,20 +31,24 @@ export default function EventCard({ event, nowYear, highlighted, index }: Props)
     if (!fullLoaded && !event.fromFallback) {
       setLoading(true);
       try {
+        let intro: string[] = [];
+        let title: string | undefined;
         if (event.ownTitle) {
           // у события есть собственная статья — читаем её целиком
-          const intro = await fetchArticleIntro(event.ownTitle);
-          if (intro.length > 0) {
-            setParagraphs(intro);
-            setArticleTitle(event.ownTitle);
-          }
-        } else {
-          // собственной статьи нет — ищем статью именно об этом событии
+          intro = await fetchArticleIntro(event.ownTitle);
+          if (intro.length > 0) title = event.ownTitle;
+        }
+        if (intro.length === 0) {
+          // собственной статьи нет (или она пуста) — ищем по тексту самого события
           const found = await findEventArticle(event.lead);
           if (found) {
-            setParagraphs(found.paragraphs);
-            setArticleTitle(found.title);
+            intro = found.paragraphs;
+            title = found.title;
           }
+        }
+        if (intro.length > 0) {
+          setParagraphs(intro);
+          setArticleTitle(title);
         }
       } catch {
         /* остаёмся с тем, что есть */
