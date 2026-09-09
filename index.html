@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Летопись дня — исторический календарь, который каждый день показывает события, произошедшие в этот день и месяц в разные годы: сражения, открытия, рождения и смерти."
+    />
+    <meta name="theme-color" content="#0b110e" />
+    <title>Летопись дня — что произошло сегодня в истории</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- шрифты грузятся неблокирующе: если сеть недоступна, страница всё равно раскроется -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oranienbaum&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Oranienbaum&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0b110e;
+        color: #eae3cf;
+      }
+      .boot-note {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Georgia, "Times New Roman", serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #c9a24b;
+        animation: boot-pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes boot-pulse {
+        0%, 100% { opacity: 0.45; }
+        50% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"><div class="boot-note">Раскрываем летопись…</div></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
