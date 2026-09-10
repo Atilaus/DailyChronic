@@ -232,6 +232,42 @@ export default function App() {
   const centuryCount = useMemo(() => new Set(events.map((e) => centuryOf(e.year))).size, [events]);
   const isToday = month === TODAY.month && day === TODAY.day;
 
+  /* ---------- динамические title и description для SEO ---------- */
+
+  useEffect(() => {
+    const title = `${day} ${MONTHS_GEN[month - 1]} — что произошло в этот день в истории | Летопись дня`;
+    const description = `Исторические события ${day} ${MONTHS_GEN[month - 1]}: ${events.length} записей от ${oldest ?? 'древности'} до ${newest ?? 'наших дней'} года. Сражения, открытия, рождения и смерти великих людей. Подробные статьи из Википедии.`;
+    
+    document.title = title;
+    
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', description);
+    
+    // Обновляем Open Graph
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) ogDescription.setAttribute('content', description);
+    
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute('content', title);
+    
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDescription) twitterDescription.setAttribute('content', description);
+    
+    // Canonical URL с датой
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', `/#d=${pad2(month)}-${pad2(day)}`);
+    }
+  }, [month, day, events.length, oldest, newest]);
+
   const selectCls =
     "border border-ivory-200/15 bg-ink-850 px-3 py-2 font-mono text-sm text-ivory-200 outline-none transition-colors hover:border-gold-400/50 focus:border-gold-400/70";
 
