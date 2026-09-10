@@ -61,19 +61,40 @@ export default function EventCard({ event, nowYear, highlighted, index }: Props)
 
   const visible = expanded ? paragraphs : paragraphs.slice(0, 1);
 
+  // Structured data для поисковых систем
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": event.title,
+    "startDate": `${event.year}-01-01`,
+    "description": event.lead,
+    "url": event.url,
+    "image": event.image,
+    "eventStatus": "https://schema.org/EventCompleted",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+  };
+
   return (
     <article
       id={event.id}
       className={`group relative scroll-mt-32 transition-colors duration-500 ${
         highlighted ? "highlight-flash rounded-sm" : ""
       }`}
+      itemScope
+      itemType="https://schema.org/Event"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="grid grid-cols-[64px_1fr] gap-x-4 sm:grid-cols-[110px_1fr] sm:gap-x-7">
         {/* рельса времени */}
         <div className="relative flex flex-col items-end pt-1 text-right">
           <span
             className="font-mono text-[1.35rem] leading-none font-semibold tracking-tight sm:text-[1.7rem]"
             style={{ color: era.color }}
+            itemProp="startDate"
+            content={`${event.year}-01-01`}
           >
             {event.year}
           </span>
@@ -89,13 +110,12 @@ export default function EventCard({ event, nowYear, highlighted, index }: Props)
           />
         </div>
 
-        {/* содержание */}
-        <div className="pb-12">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <h3 className="font-display text-[1.55rem] leading-tight text-ivory-100 sm:text-[1.8rem]">
-              {event.title}
-            </h3>
-            {event.url && (
+          {/* содержание */}
+          <div className="pb-12">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <h3 className="font-display text-[1.55rem] leading-tight text-ivory-100 sm:text-[1.8rem]" itemProp="name">
+                {event.title}
+              </h3>            {event.url && (
               <a
                 href={event.url}
                 target="_blank"
@@ -112,6 +132,7 @@ export default function EventCard({ event, nowYear, highlighted, index }: Props)
           <p
             className="mt-3 border-l-2 pl-4 font-body text-[0.98rem] leading-relaxed text-ivory-400 italic"
             style={{ borderColor: era.color }}
+            itemProp="description"
           >
             {event.lead}
           </p>
@@ -178,9 +199,12 @@ export default function EventCard({ event, nowYear, highlighted, index }: Props)
                 <div className="aspect-[4/3] overflow-hidden bg-ink-800">
                   <img
                     src={event.image}
-                    alt={event.title}
+                    alt={`Иллюстрация к событию: ${event.title}, ${event.year} год`}
                     loading="lazy"
+                    decoding="async"
                     className="img-archive h-full w-full object-cover"
+                    width="190"
+                    height="143"
                   />
                 </div>
                 <figcaption className="label-mono flex items-center justify-between px-2.5 py-1.5 text-ivory-600/80">
